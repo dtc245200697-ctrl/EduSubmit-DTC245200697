@@ -1,0 +1,27 @@
+
+@api = http://localhost:5000
+
+### Kiểm tra API đang chạy
+GET {{api}}/
+
+### Lấy danh sách bài tập
+GET {{api}}/api/assignments
+
+### Nộp bài hợp lệ → 201 Created
+# @name createSubmission
+POST {{api}}/api/submissions
+Content-Type: application/json
+
+{ "assignmentId": 1, "studentCode": "SV001", "repositoryUrl": "https://example.com/sv001/bai-tap-1" }
+
+### Đọc lượt nộp vừa tạo (kỳ vọng 200, dùng Id ở phản hồi POST phía trên)
+GET {{api}}/api/submissions/{{createSubmission.response.body.$.id}}
+
+### Đọc lượt nộp không tồn tại (kỳ vọng 404)
+GET {{api}}/api/submissions/11111111-1111-1111-1111-111111111111
+
+### Nộp bài thiếu studentCode → 400 Bad Request
+POST {{api}}/api/submissions
+Content-Type: application/json
+
+{ "assignmentId": 1, "studentCode": "", "repositoryUrl": "https://example.com/x" }
